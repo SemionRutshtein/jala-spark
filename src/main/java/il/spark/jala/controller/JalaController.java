@@ -2,6 +2,7 @@ package il.spark.jala.controller;
 
 import il.spark.jala.models.Transaction;
 import il.spark.jala.service.MongoExecutorService;
+import il.spark.jala.service.SparkExecutorService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.List;
 public class JalaController {
 
     private final MongoExecutorService mongoExecutorService;
+    private final SparkExecutorService sparkExecutorService;
 
 
     @GetMapping("/check")
@@ -28,4 +30,9 @@ public class JalaController {
         return new ResponseEntity<>(allTransactions, HttpStatus.OK);
     }
 
+
+    @GetMapping("/check2")
+    public void getData1() {
+        sparkExecutorService.getAllTransactions();
+    }
 }

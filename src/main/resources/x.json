@@ -1,0 +1,82 @@
+db.transactions.insertMany([
+  {
+    "creditCardSerialId": "CC111111111",
+    "externalId": "EXT111111111",
+    "type": "Purchase",
+    "amount": 750,
+    "cardType": "Visa",
+    "transactions": ["TXN444", "TXN555"]
+  },
+  {
+    "creditCardSerialId": "CC222222222",
+    "externalId": "EXT222222222",
+    "type": "Payment",
+    "amount": 2000,
+    "cardType": "MasterCard",
+    "transactions": ["TXN666"]
+  },
+  {
+    "creditCardSerialId": "CC333333333",
+    "externalId": "EXT333333333",
+    "type": "Withdrawal",
+    "amount": 300,
+    "cardType": "Amex",
+    "transactions": ["TXN777", "TXN888"]
+  },
+  {
+    "creditCardSerialId": "CC444444444",
+    "externalId": "EXT444444444",
+    "type": "Purchase",
+    "amount": 1200,
+    "cardType": "Visa",
+    "transactions": ["TXN999"]
+  },
+  {
+    "creditCardSerialId": "CC555555555",
+    "externalId": "EXT555555555",
+    "type": "Payment",
+    "amount": 150,
+    "cardType": "MasterCard",
+    "transactions": ["TXN1010"]
+  },
+  {
+    "creditCardSerialId": "CC666666666",
+    "externalId": "EXT666666666",
+    "type": "Withdrawal",
+    "amount": 450,
+    "cardType": "Visa",
+    "transactions": ["TXN1111", "TXN1212"]
+  },
+  {
+    "creditCardSerialId": "CC777777777",
+    "externalId": "EXT777777777",
+    "type": "Purchase",
+    "amount": 3000,
+    "cardType": "Amex",
+    "transactions": ["TXN1313"]
+  },
+  {
+    "creditCardSerialId": "CC888888888",
+    "externalId": "EXT888888888",
+    "type": "Payment",
+    "amount": 600,
+    "cardType": "MasterCard",
+    "transactions": ["TXN1414", "TXN1515"]
+  },
+  {
+    "creditCardSerialId": "CC999999999",
+    "externalId": "EXT999999999",
+    "type": "Withdrawal",
+    "amount": 900,
+    "cardType": "Visa",
+    "transactions": ["TXN1616"]
+  },
+  {
+    "creditCardSerialId": "CC101010101",
+    "externalId": "EXT101010101",
+    "type": "Purchase",
+    "amount": 1800,
+    "cardType": "Amex",
+    "transactions": ["TXN1717", "TXN1818"]
+  }
+]);
