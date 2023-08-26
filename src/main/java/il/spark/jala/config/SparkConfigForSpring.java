@@ -11,6 +11,8 @@ public class SparkConfigForSpring {
     public SparkSession sparkSessionDev(){
         return SparkSession.builder()
                 .config("spark.mongodb.input.uri", "mongodb://admin:admin@localhost:27017/credit-card.transactions")
+                .config("spark.mongodb.input.uri", "mongodb://admin:admin@localhost:27017/credit-card.books")
+                .config("spark.mongodb.input.uri", "mongodb://admin:admin@localhost:27017/credit-card.transactions")
                 .master("local[*]")
                 .appName("jala")
                 .getOrCreate();
