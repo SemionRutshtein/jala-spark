@@ -32,7 +32,12 @@ public class JalaController {
 
 
     @GetMapping("/check2")
-    public void getData1() {
+    public void getData2() {
         sparkExecutorService.joinSample();
+    }
+
+    @GetMapping("/check3")
+    public void getData3() {
+        sparkExecutorService.secondJoinSample();
     }
 }

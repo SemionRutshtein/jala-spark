@@ -1,15 +1,13 @@
 package il.spark.jala.service;
 
 import com.mongodb.spark.MongoSpark;
-import il.spark.jala.models.Artist;
-import il.spark.jala.models.Book;
-import il.spark.jala.models.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.apache.spark.sql.functions;
 import org.bson.Document;
 import org.springframework.stereotype.Service;
 
@@ -56,15 +54,6 @@ public class SparkExecutorService {
 
 
         // Create a DataFrame for the joined data
-        // Create a DataFrame for the joined data
-//        Dataset<Row> joinedDataset = firstTransactionDF
-//                .join(firstBookDF, firstTransactionDF.col("amount").equalTo(firstBookDF.col("amount")))
-//                .join(firstArtistDF, firstTransactionDF.col("externalId").equalTo(firstArtistDF.col("externalId")))
-//                .select("creditCardSerialId", "externalId", "amount", "cardType");
-
-
-
-
         Dataset<Row> joinedDataset = firstTransactionDF
                 .join(firstBookDF, firstTransactionDF.col("amount").equalTo(firstBookDF.col("amount")))
                 .join(firstArtistDF, firstTransactionDF.col("externalId").equalTo(firstArtistDF.col("externalId")))
@@ -82,6 +71,40 @@ public class SparkExecutorService {
 
         // Write the final dataset to a new MongoDB collection
         writeMongoCollection(joinedDataset, "credit-card.collectedEtlData");
+    }
+
+
+    public void secondJoinSample() {
+
+        JavaSparkContext javaSparkContext = new JavaSparkContext(sparkSession.sparkContext());
+
+        Dataset<Row> transactionsDataset = loadMongoCollection(javaSparkContext, "credit-card.transactions")
+                .withColumn("transaction_id", functions.monotonically_increasing_id());
+        Dataset<Row> booksDataset = loadMongoCollection(javaSparkContext, "credit-card.books")
+                .withColumn("book_id", functions.monotonically_increasing_id());
+        Dataset<Row> artistsDataset = loadMongoCollection(javaSparkContext, "credit-card.artists")
+                .withColumn("artist_id", functions.monotonically_increasing_id());
+
+        Dataset<Row> joinedDataset = transactionsDataset
+                .join(booksDataset, transactionsDataset.col("transaction_id").equalTo(booksDataset.col("book_id")))
+                .join(artistsDataset, transactionsDataset.col("transaction_id").equalTo(artistsDataset.col("artist_id")))
+                .select(
+                        transactionsDataset.col("*"),
+                        booksDataset.col("*"),
+                        artistsDataset.col("*")
+                );
+
+        joinedDataset.show();  // Display the joined dataset
+
+        // Perform further transformations or aggregations
+
+        // Write the final dataset to a new MongoDB collection
+        writeMongoCollection(joinedDataset, "credit-card.collectedEtlData2");
+
+        sparkSession.stop();
+        javaSparkContext.close();
+
+
     }
 
     private Dataset<Row> loadMongoCollection(JavaSparkContext javaSparkContext, String collectionUri) {
