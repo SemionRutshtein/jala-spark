@@ -33,6 +33,6 @@ public class JalaController {
 
     @GetMapping("/check2")
     public void getData1() {
-        sparkExecutorService.getAllTransactions();
+        sparkExecutorService.joinSample();
     }
 }

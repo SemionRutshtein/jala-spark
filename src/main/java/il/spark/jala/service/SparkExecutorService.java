@@ -1,6 +1,8 @@
 package il.spark.jala.service;
 
 import com.mongodb.spark.MongoSpark;
+import il.spark.jala.models.Artist;
+import il.spark.jala.models.Book;
 import il.spark.jala.models.Transaction;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -8,9 +10,10 @@ import org.apache.spark.api.java.JavaSparkContext;
 import org.apache.spark.sql.Dataset;
 import org.apache.spark.sql.Row;
 import org.apache.spark.sql.SparkSession;
+import org.bson.Document;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.util.Collections;
 
 @Slf4j
 @Service
@@ -25,10 +28,56 @@ public class SparkExecutorService {
 
         Dataset<Row> rowDataset = MongoSpark.load(javaSparkContext).toDF();
         rowDataset.show();
+        long count = rowDataset.count();
+
+        System.out.println("SHOW COUNT OF CURRENT DB TABLE : " + count);
 
         sparkSession.stop();
         javaSparkContext.close();
 
     }
 
+    public void joinSample() {
+
+        JavaSparkContext javaSparkContext = new JavaSparkContext(sparkSession.sparkContext());
+
+        Dataset<Row> transactionsDataset = loadMongoCollection(javaSparkContext, "credit-card.transactions");
+        Dataset<Row> booksDataset = loadMongoCollection(javaSparkContext, "credit-card.books");
+        Dataset<Row> artistsDataset = loadMongoCollection(javaSparkContext, "credit-card.artists");
+
+        // Select the first entity from each dataset
+        Row firstTransaction = transactionsDataset.first();
+        Row firstBook = booksDataset.first();
+        Row firstArtist = artistsDataset.first();
+
+        Dataset<Row> firstTransactionDF = sparkSession.createDataFrame(Collections.singletonList(firstTransaction), Transaction.class);
+        Dataset<Row> firstBookDF = sparkSession.createDataFrame(Collections.singletonList(firstBook), Book.class);
+        Dataset<Row> firstArtistDF = sparkSession.createDataFrame(Collections.singletonList(firstArtist), Artist.class);
+
+
+        // Create a DataFrame for the joined data
+        // Create a DataFrame for the joined data
+        Dataset<Row> joinedDataset = sparkSession.createDataFrame(
+                        Collections.singletonList(1),
+                        Integer.class
+                )
+                .join(firstTransactionDF)
+                .join(firstBookDF)
+                .join(firstArtistDF)
+                .select("creditCardSerialId", "externalId", "amount", "cardType");
+
+
+        // Perform further transformations or aggregations
+
+        // Write the final dataset to a new MongoDB collection
+        writeMongoCollection(joinedDataset, "credit-card.collectedEtlData");
+    }
+
+    private Dataset<Row> loadMongoCollection(JavaSparkContext javaSparkContext, String collectionUri) {
+        return MongoSpark.load(javaSparkContext).withPipeline(Collections.singletonList(Document.parse("{ $match: { } }"))).toDF();
+    }
+
+    private void writeMongoCollection(Dataset<Row> dataset, String collectionUri) {
+        MongoSpark.write(dataset).option("uri", "mongodb://admin:admin@localhost:27017/" + collectionUri).mode("overwrite").save();
+    }
 }
