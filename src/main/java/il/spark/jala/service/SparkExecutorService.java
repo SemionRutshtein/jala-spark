@@ -50,21 +50,32 @@ public class SparkExecutorService {
         Row firstBook = booksDataset.first();
         Row firstArtist = artistsDataset.first();
 
-        Dataset<Row> firstTransactionDF = sparkSession.createDataFrame(Collections.singletonList(firstTransaction), Transaction.class);
-        Dataset<Row> firstBookDF = sparkSession.createDataFrame(Collections.singletonList(firstBook), Book.class);
-        Dataset<Row> firstArtistDF = sparkSession.createDataFrame(Collections.singletonList(firstArtist), Artist.class);
+        Dataset<Row> firstTransactionDF = sparkSession.createDataFrame(Collections.singletonList(firstTransaction), firstTransaction.schema());
+        Dataset<Row> firstBookDF = sparkSession.createDataFrame(Collections.singletonList(firstBook), firstBook.schema());
+        Dataset<Row> firstArtistDF = sparkSession.createDataFrame(Collections.singletonList(firstArtist), firstArtist.schema());
 
 
         // Create a DataFrame for the joined data
         // Create a DataFrame for the joined data
-        Dataset<Row> joinedDataset = sparkSession.createDataFrame(
-                        Collections.singletonList(1),
-                        Integer.class
-                )
-                .join(firstTransactionDF)
-                .join(firstBookDF)
-                .join(firstArtistDF)
-                .select("creditCardSerialId", "externalId", "amount", "cardType");
+//        Dataset<Row> joinedDataset = firstTransactionDF
+//                .join(firstBookDF, firstTransactionDF.col("amount").equalTo(firstBookDF.col("amount")))
+//                .join(firstArtistDF, firstTransactionDF.col("externalId").equalTo(firstArtistDF.col("externalId")))
+//                .select("creditCardSerialId", "externalId", "amount", "cardType");
+
+
+
+
+        Dataset<Row> joinedDataset = firstTransactionDF
+                .join(firstBookDF, firstTransactionDF.col("amount").equalTo(firstBookDF.col("amount")))
+                .join(firstArtistDF, firstTransactionDF.col("externalId").equalTo(firstArtistDF.col("externalId")))
+                .select(
+                        firstTransactionDF.col("creditCardSerialId"),
+                        firstTransactionDF.col("externalId"),
+                        firstTransactionDF.col("amount"),
+                        firstTransactionDF.col("cardType")
+//                        firstBookDF.col("subtitle"),       // Make sure the column name matches the field name in the JSON
+//                        firstArtistDF.col("knownAs")
+                );
 
 
         // Perform further transformations or aggregations
