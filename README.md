@@ -73,3 +73,94 @@ This documentation outlines the ETL process implemented in this project using Sp
 ## Project Structure
 
 ### Directory Structure
+
+
+
+### Explanation of Key Directories and Files
+- `src/main/java/com/yourcompany/`: Java source code directory.
+- `src/main/resources/`: Configuration files, properties, and other resources.
+- `application.properties`: Configuration properties for the Spring Boot application.
+
+## Getting Started
+
+### Installation and Setup
+- Clone the repository: `git clone <repository_url>`
+- Install Java, Maven, MongoDB, and Spark.
+- Configure database connection in `application.properties`.
+
+### Configuration
+- Set database credentials, connection URLs, and other configuration in `application.properties`.
+
+## ETL Process
+
+### Overview of ETL
+The ETL process involves extracting data from multiple MongoDB collections, transforming the data, and loading the processed data into a new MongoDB collection.
+
+### Data Sources
+- List the MongoDB collections used as data sources.
+
+### Transformation Steps
+- Describe the transformation steps applied to the data.
+- Provide any specific code examples.
+
+### Loading Data into New Collection
+- Explain how the processed data is loaded into a new collection.
+
+## Running the Project
+
+### Starting the Application
+- Run the Spring Boot application: `mvn spring-boot:run`
+
+### Running the ETL Process
+- Describe the process of triggering the ETL process.
+- If there's a specific command or endpoint, mention it here.
+
+## Usage and API Endpoints (if applicable)
+
+### Explanation of Available Endpoints
+- List and explain the API endpoints (if your project provides a REST API).
+
+### Examples of API Requests and Responses
+- Provide example API requests and responses for each endpoint.
+
+## Deployment (if applicable)
+
+### Deployment Considerations
+- Discuss deployment options (e.g., cloud platforms, servers).
+- Provide any necessary deployment configurations.
+
+### Server Configuration
+- Mention any server-specific configuration requirements.
+
+## Contribution Guidelines
+
+### How to Contribute
+- Explain how others can contribute to the project.
+- Provide guidelines for creating pull requests and contributing code.
+
+### Code Style and Guidelines
+- Describe the preferred code style and any coding guidelines.
+
+### Pull Request Process
+- Outline the process for submitting and reviewing pull requests.
+
+## Troubleshooting
+
+### Common Issues and Solutions
+- List common problems users might face and their solutions.
+
+## Future Enhancements
+
+### Ideas for Future Development
+- Share ideas for future project enhancements or features.
+
+## Acknowledgments
+
+### Credits and References
+- Acknowledge any third-party libraries, tools, or resources used.
+
+## License
+
+### Project's License Information
+- Specify the project's license information.
+
