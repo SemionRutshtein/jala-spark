@@ -114,4 +114,8 @@ public class SparkExecutorService {
     private void writeMongoCollection(Dataset<Row> dataset, String collectionUri) {
         MongoSpark.write(dataset).option("uri", "mongodb://admin:admin@localhost:27017/" + collectionUri).mode("overwrite").save();
     }
+
+    private void saveMongoCollection(Dataset<Row> dataset) {
+        MongoSpark.save(dataset);
+    }
 }

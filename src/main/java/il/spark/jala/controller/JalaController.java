@@ -1,6 +1,7 @@
 package il.spark.jala.controller;
 
 import il.spark.jala.models.Transaction;
+import il.spark.jala.service.ReaderSpService;
 import il.spark.jala.service.MongoExecutorService;
 import il.spark.jala.service.SparkExecutorService;
 import lombok.RequiredArgsConstructor;
@@ -22,6 +23,8 @@ public class JalaController {
     private final MongoExecutorService mongoExecutorService;
     private final SparkExecutorService sparkExecutorService;
 
+    private final ReaderSpService readerSpService;
+
 
     @GetMapping("/check")
     public ResponseEntity<List<Transaction>> getData() {
@@ -40,4 +43,13 @@ public class JalaController {
     public void getData3() {
         sparkExecutorService.secondJoinSample();
     }
+    @GetMapping("/check4")
+    public void getData4() {
+        readerSpService.readCsvFile();
+    }
+    @GetMapping("/check5")
+    public void getData5() {
+        readerSpService.filteringData();
+    }
+
 }

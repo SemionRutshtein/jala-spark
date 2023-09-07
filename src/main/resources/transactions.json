@@ -1,4 +1,4 @@
-db.transactions.insertMany([
+[
   {
     "creditCardSerialId": "CC111111111",
     "externalId": "EXT111111111",
